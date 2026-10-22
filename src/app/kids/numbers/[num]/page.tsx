@@ -3,7 +3,7 @@
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Volume2 } from 'lucide-react';
+import { ArrowLeft, Volume2, Sparkles } from 'lucide-react';
 import { KIDS_NUMBERS, getKidNumberById } from '@/data/kids-numbers';
 import { KidsTracingCanvas, KidsCanvasHandle } from '@/components/Kids/KidsTracingCanvas';
 import { KidsToolbar } from '@/components/Kids/KidsToolbar';
@@ -26,7 +26,7 @@ export default function KidsNumberPage({ params }: KidsNumberPageProps) {
   const [mode, setMode] = useState<'english' | 'hindi'>('english');
   const [tool, setTool] = useState<'crayon' | 'rainbow' | 'eraser'>('rainbow');
   const [color, setColor] = useState('#10b981');
-  const [brushSize, setBrushSize] = useState(14);
+  const [brushSize, setBrushSize] = useState(16);
   const [strokeCount, setStrokeCount] = useState(0);
   const [matchPercentage, setMatchPercentage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,10 +35,10 @@ export default function KidsNumberPage({ params }: KidsNumberPageProps) {
   if (!numItem) {
     return (
       <div className="text-center py-12 space-y-4">
-        <h2 className="text-2xl font-black">Number not found!</h2>
+        <h2 className="text-3xl font-black">Number not found!</h2>
         <Link
           href="/kids/numbers"
-          className="inline-block px-5 py-2.5 bg-emerald-400 text-emerald-950 font-black rounded-2xl"
+          className="inline-block px-6 py-3 btn-3d-emerald text-white font-black rounded-2xl text-base"
         >
           Back to Numbers
         </Link>
@@ -62,7 +62,6 @@ export default function KidsNumberPage({ params }: KidsNumberPageProps) {
   };
 
   const handleFiftyPercentReached = () => {
-    // Automatically speak when match exceeds 50%!
     kidsAudio.speakRewardOnFifty(
       activeChar,
       activeWord,
@@ -102,6 +101,7 @@ export default function KidsNumberPage({ params }: KidsNumberPageProps) {
   };
 
   const handlePronounce = () => {
+    kidsAudio.playPop();
     if (mode === 'english') {
       kidsAudio.speak(numItem.soundPromptEn, 'en');
     } else {
@@ -117,41 +117,43 @@ export default function KidsNumberPage({ params }: KidsNumberPageProps) {
   };
 
   return (
-    <div className="space-y-4 py-2 max-w-5xl mx-auto">
+    <div className="space-y-6 py-2 max-w-5xl mx-auto">
       {/* Top Bar Navigation & Language Switcher */}
       <div className="flex items-center justify-between">
         <Link
           href="/kids/numbers"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white border-2 border-slate-200 text-slate-700 font-black text-xs hover:bg-slate-50 transition-all"
+          className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl btn-3d-emerald text-white font-black text-sm shadow-md"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-5 h-5" />
           <span>All Numbers</span>
         </Link>
 
-        {/* English / Hindi Digit Toggle */}
-        <div className="flex items-center gap-1 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
+        {/* English / Hindi Digit Toggle (Chunky Tactile) */}
+        <div className="flex items-center gap-2 bg-slate-100 p-2 rounded-2xl border-2 border-slate-200">
           <button
             onClick={() => {
+              kidsAudio.playPop();
               setMode('english');
               handleClear();
             }}
-            className={`px-3 py-1 rounded-xl text-xs font-black transition-all ${
+            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all ${
               mode === 'english'
-                ? 'bg-emerald-500 text-white shadow-sm'
-                : 'text-slate-600'
+                ? 'btn-3d-emerald text-white scale-105 shadow-sm'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             English (123)
           </button>
           <button
             onClick={() => {
+              kidsAudio.playPop();
               setMode('hindi');
               handleClear();
             }}
-            className={`px-3 py-1 rounded-xl text-xs font-black transition-all ${
+            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all ${
               mode === 'hindi'
-                ? 'bg-emerald-500 text-white shadow-sm'
-                : 'text-slate-600'
+                ? 'btn-3d-emerald text-white scale-105 shadow-sm'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             हिंदी (१२३)
@@ -160,14 +162,15 @@ export default function KidsNumberPage({ params }: KidsNumberPageProps) {
       </div>
 
       {/* Main Tracing & Counting Suite */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Counting Card & Phonics */}
-        <div className="lg:col-span-5 order-2 lg:order-1 space-y-4">
-          <div className="bg-white border-4 border-emerald-200 rounded-3xl p-6 shadow-md space-y-5">
-            <div className="text-center bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-200/60 rounded-3xl p-6">
-              <div className="text-5xl font-black text-slate-900 mb-1">
+        <div className="lg:col-span-5 order-2 lg:order-1 space-y-5">
+          <div className="bg-white border-4 border-emerald-300 rounded-[2.5rem] p-6 sm:p-7 shadow-xl space-y-6">
+            {/* Giant Number Display */}
+            <div className="text-center bg-gradient-to-br from-emerald-100/70 via-teal-50 to-emerald-50 border-4 border-emerald-300/80 rounded-[2rem] p-6 shadow-inner">
+              <div className="text-6xl sm:text-7xl font-black text-slate-900 tracking-tight mb-1 animate-float">
                 {activeChar}{' '}
-                <span className="text-2xl font-bold text-emerald-600">
+                <span className="text-3xl sm:text-4xl font-black text-emerald-600">
                   ({activeWord})
                 </span>
               </div>
@@ -175,33 +178,33 @@ export default function KidsNumberPage({ params }: KidsNumberPageProps) {
               {/* Audio button */}
               <button
                 onClick={handlePronounce}
-                className="mt-3 inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-emerald-400 hover:bg-emerald-500 text-emerald-950 font-black text-xs sm:text-sm shadow-md shadow-emerald-400/30 transition-all transform hover:scale-105 active:scale-95"
+                className="mt-4 w-full inline-flex items-center justify-center gap-2 py-4 px-6 rounded-2xl btn-3d-emerald text-white font-black text-base shadow-md active:scale-95"
               >
-                <Volume2 className="w-5 h-5" />
-                <span>Hear Counting Sound 🔊</span>
+                <Volume2 className="w-6 h-6 animate-wiggle" />
+                <span>Hear Counting Sound! 🔊</span>
               </button>
             </div>
 
             {/* Interactive Tappable Counting Playground */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs font-black text-slate-700">
-                <span>Tap to Count {numItem.emoji}:</span>
-                <span className="text-emerald-600">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between text-sm font-black text-slate-700">
+                <span>Tap each {numItem.emoji} to count:</span>
+                <span className="text-emerald-600 text-base font-black bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
                   {poppedCount.length} / {numItem.emojiCount}
                 </span>
               </div>
 
-              <div className="flex flex-wrap items-center justify-center gap-3 p-4 bg-slate-50 border-2 border-dashed border-emerald-200 rounded-2xl">
+              <div className="flex flex-wrap items-center justify-center gap-4 p-5 bg-emerald-50/50 border-3 border-dashed border-emerald-300 rounded-3xl">
                 {Array.from({ length: numItem.emojiCount }).map((_, i) => {
                   const isPopped = poppedCount.includes(i);
                   return (
                     <button
                       key={i}
                       onClick={() => handleTapObject(i)}
-                      className={`text-4xl transition-all transform active:scale-75 ${
+                      className={`text-5xl sm:text-6xl transition-all transform active:scale-75 select-none ${
                         isPopped
-                          ? 'scale-115 drop-shadow-md ring-2 ring-emerald-400 rounded-full bg-emerald-100 p-1'
-                          : 'hover:scale-110 opacity-70'
+                          ? 'scale-125 drop-shadow-lg ring-4 ring-emerald-400 rounded-3xl bg-emerald-200 p-2 animate-bounce'
+                          : 'hover:scale-115 opacity-70 hover:opacity-100'
                       }`}
                     >
                       {numItem.emoji}
@@ -212,23 +215,23 @@ export default function KidsNumberPage({ params }: KidsNumberPageProps) {
             </div>
 
             {/* Stroke Tips */}
-            <div className="space-y-1.5">
-              <h4 className="text-xs font-black text-slate-700 uppercase tracking-wider">
+            <div className="space-y-2">
+              <h4 className="text-xs sm:text-sm font-black text-slate-700 uppercase tracking-wider">
                 How to trace:
               </h4>
-              <ul className="text-xs text-slate-600 space-y-1">
+              <div className="space-y-2">
                 {activeHints.map((hint, idx) => (
-                  <li key={idx} className="bg-slate-50 p-2 rounded-xl">
+                  <div key={idx} className="bg-slate-50 p-3 rounded-2xl border border-slate-200 text-xs sm:text-sm font-bold text-slate-700">
                     {hint}
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Right Column: Tracing Canvas, Match Meter & Kid Toolbar */}
-        <div className="lg:col-span-7 order-1 lg:order-2 space-y-3">
+        <div className="lg:col-span-7 order-1 lg:order-2 space-y-4">
           {/* Real-time Match Meter */}
           <KidsMatchMeter
             percentage={matchPercentage}

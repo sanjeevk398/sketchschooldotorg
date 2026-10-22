@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Sparkles, Eraser, Trash2, CheckCircle2, RotateCcw } from 'lucide-react';
+import { Sparkles, Eraser, RotateCcw, CheckCircle2 } from 'lucide-react';
+import { kidsAudio } from '@/lib/kids-audio';
 
 interface KidsToolbarProps {
   tool: 'crayon' | 'rainbow' | 'eraser';
@@ -16,13 +17,13 @@ interface KidsToolbarProps {
 }
 
 const BRIGHT_COLORS = [
-  { name: 'Cherry Red', hex: '#ef4444' },
-  { name: 'Sky Blue', hex: '#3b82f6' },
-  { name: 'Grass Green', hex: '#10b981' },
-  { name: 'Sunshine Yellow', hex: '#f59e0b' },
-  { name: 'Magic Purple', hex: '#8b5cf6' },
-  { name: 'Bubblegum Pink', hex: '#ec4899' },
-  { name: 'Ink Black', hex: '#1e293b' },
+  { name: 'Red', hex: '#ef4444' },
+  { name: 'Blue', hex: '#3b82f6' },
+  { name: 'Green', hex: '#10b981' },
+  { name: 'Yellow', hex: '#f59e0b' },
+  { name: 'Purple', hex: '#8b5cf6' },
+  { name: 'Pink', hex: '#ec4899' },
+  { name: 'Black', hex: '#1e293b' },
 ];
 
 export const KidsToolbar: React.FC<KidsToolbarProps> = ({
@@ -36,59 +37,74 @@ export const KidsToolbar: React.FC<KidsToolbarProps> = ({
   onSubmit,
   strokeCount,
 }) => {
+  const handleToolSelect = (newTool: 'crayon' | 'rainbow' | 'eraser') => {
+    kidsAudio.playPop();
+    setTool(newTool);
+  };
+
+  const handleColorSelect = (hex: string) => {
+    kidsAudio.playPop();
+    setColor(hex);
+  };
+
+  const handleClearClick = () => {
+    kidsAudio.playPop();
+    onClear();
+  };
+
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 p-3 sm:p-4 bg-white/95 backdrop-blur-md border-2 border-amber-200 rounded-3xl shadow-md">
-      {/* Tool Selection (Big touch targets) */}
-      <div className="flex items-center gap-2">
+    <div className="flex flex-wrap items-center justify-between gap-3 p-4 bg-white border-4 border-amber-300 rounded-[2rem] shadow-xl">
+      {/* Tool Selection (Chunky, oversized buttons with 3D press feel) */}
+      <div className="flex items-center gap-2.5">
         <button
-          onClick={() => setTool('crayon')}
-          className={`flex items-center gap-2 px-3.5 py-2.5 rounded-2xl font-black text-xs sm:text-sm transition-all transform active:scale-95 ${
+          onClick={() => handleToolSelect('crayon')}
+          className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-black text-sm sm:text-base transition-all transform active:scale-95 ${
             tool === 'crayon'
-              ? 'bg-amber-400 text-amber-950 shadow-md scale-105 ring-2 ring-amber-500'
-              : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              ? 'btn-3d-amber text-amber-950 scale-105 shadow-md'
+              : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
           }`}
         >
-          <span className="text-base">🖍️</span>
+          <span className="text-xl">🖍️</span>
           <span>Crayon</span>
         </button>
 
         <button
-          onClick={() => setTool('rainbow')}
-          className={`flex items-center gap-2 px-3.5 py-2.5 rounded-2xl font-black text-xs sm:text-sm transition-all transform active:scale-95 ${
+          onClick={() => handleToolSelect('rainbow')}
+          className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-black text-sm sm:text-base transition-all transform active:scale-95 ${
             tool === 'rainbow'
-              ? 'bg-gradient-to-r from-rose-500 via-amber-500 to-indigo-500 text-white shadow-md scale-105 ring-2 ring-indigo-400'
-              : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              ? 'bg-gradient-to-r from-rose-500 via-amber-500 to-indigo-500 text-white shadow-lg border-b-4 border-indigo-700 scale-105'
+              : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
           }`}
         >
-          <Sparkles className="w-4 h-4 text-amber-300 animate-spin" />
+          <Sparkles className="w-5 h-5 text-amber-300 animate-spin" />
           <span>Rainbow Magic</span>
         </button>
 
         <button
-          onClick={() => setTool('eraser')}
-          className={`flex items-center gap-2 px-3.5 py-2.5 rounded-2xl font-black text-xs sm:text-sm transition-all transform active:scale-95 ${
+          onClick={() => handleToolSelect('eraser')}
+          className={`flex items-center gap-2 px-4 py-3 rounded-2xl font-black text-sm sm:text-base transition-all transform active:scale-95 ${
             tool === 'eraser'
-              ? 'bg-rose-400 text-white shadow-md scale-105 ring-2 ring-rose-500'
-              : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              ? 'btn-3d-rose text-white scale-105 shadow-md'
+              : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
           }`}
         >
-          <Eraser className="w-4 h-4" />
+          <span className="text-xl">🧽</span>
           <span>Sponge</span>
         </button>
       </div>
 
-      {/* Color Palette (Large bubbles) */}
+      {/* Large Colorful Blobs */}
       {tool !== 'eraser' && tool !== 'rainbow' && (
-        <div className="flex items-center gap-2 bg-slate-50 p-1.5 rounded-2xl border border-slate-200">
+        <div className="flex items-center gap-2.5 bg-amber-50 p-2 rounded-2xl border-2 border-amber-200">
           {BRIGHT_COLORS.map((c) => (
             <button
               key={c.hex}
-              onClick={() => setColor(c.hex)}
+              onClick={() => handleColorSelect(c.hex)}
               title={c.name}
-              className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full border-3 transition-transform ${
+              className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full border-4 transition-transform shadow-xs ${
                 color === c.hex
-                  ? 'scale-115 border-white ring-2 ring-amber-500 shadow-sm'
-                  : 'border-transparent hover:scale-105'
+                  ? 'scale-125 border-white ring-4 ring-amber-400 shadow-md animate-bounce'
+                  : 'border-transparent hover:scale-110'
               }`}
               style={{ backgroundColor: c.hex }}
             />
@@ -96,43 +112,53 @@ export const KidsToolbar: React.FC<KidsToolbarProps> = ({
         </div>
       )}
 
-      {/* Thickness & Actions */}
-      <div className="flex items-center gap-2">
-        <div className="flex items-center bg-slate-100 p-1 rounded-2xl">
+      {/* Thickness & Clear & Done Button */}
+      <div className="flex items-center gap-2.5">
+        <div className="flex items-center bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
           <button
-            onClick={() => setBrushSize(10)}
-            className={`px-3 py-1.5 text-xs font-bold rounded-xl transition-all ${
-              brushSize === 10 ? 'bg-white shadow-xs text-slate-900' : 'text-slate-500'
+            onClick={() => {
+              kidsAudio.playPop();
+              setBrushSize(12);
+            }}
+            className={`px-3 py-1.5 text-xs sm:text-sm font-black rounded-xl transition-all ${
+              brushSize === 12
+                ? 'bg-white shadow-sm text-slate-900 scale-105'
+                : 'text-slate-500 hover:text-slate-800'
             }`}
           >
             Chunky
           </button>
           <button
-            onClick={() => setBrushSize(20)}
-            className={`px-3 py-1.5 text-xs font-bold rounded-xl transition-all ${
-              brushSize === 20 ? 'bg-white shadow-xs text-slate-900' : 'text-slate-500'
+            onClick={() => {
+              kidsAudio.playPop();
+              setBrushSize(22);
+            }}
+            className={`px-3 py-1.5 text-xs sm:text-sm font-black rounded-xl transition-all ${
+              brushSize === 22
+                ? 'bg-white shadow-sm text-slate-900 scale-105'
+                : 'text-slate-500 hover:text-slate-800'
             }`}
           >
-            Super
+            Super Chunky!
           </button>
         </div>
 
         <button
-          onClick={onClear}
+          onClick={handleClearClick}
           title="Clear everything"
-          className="p-2.5 rounded-2xl bg-slate-100 text-slate-600 hover:bg-rose-100 hover:text-rose-600 transition-all active:scale-90"
+          className="p-3.5 rounded-2xl bg-rose-50 text-rose-600 hover:bg-rose-100 border-2 border-rose-200 transition-all active:scale-90"
         >
           <RotateCcw className="w-5 h-5" />
         </button>
 
-        {/* Done / Check button */}
+        {/* Big Done Button */}
         <button
           onClick={onSubmit}
           disabled={strokeCount === 0}
-          className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl font-black text-sm shadow-lg transition-all transform active:scale-95 ${
+          className={`flex items-center gap-2 px-6 py-3.5 rounded-2xl font-black text-sm sm:text-base shadow-xl transition-all transform active:scale-95 ${
             strokeCount === 0
               ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'
-              : 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/30 scale-105 animate-bounce'
+              : 'btn-3d-emerald text-white animate-bounce'
           }`}
         >
           <CheckCircle2 className="w-5 h-5" />

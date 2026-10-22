@@ -2,9 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Star, Sparkles, Check } from 'lucide-react';
+import { ArrowLeft, Star, Check } from 'lucide-react';
 import { HINDI_SWAR, HINDI_VYANJAN } from '@/data/kids-hindi';
 import { getKidsProgress, KidsProgress } from '@/lib/kids-storage';
+import { kidsAudio } from '@/lib/kids-audio';
 
 export default function KidsHindiGridPage() {
   const [progress, setProgress] = useState<KidsProgress | null>(null);
@@ -15,47 +16,51 @@ export default function KidsHindiGridPage() {
 
   const completedMap = new Set(progress?.completedIds || []);
 
+  const handleTileClick = () => {
+    kidsAudio.playPop();
+  };
+
   return (
-    <div className="space-y-8 py-4 max-w-5xl mx-auto">
+    <div className="space-y-10 py-4 max-w-5xl mx-auto">
       {/* Navigation Header */}
       <div className="flex items-center justify-between">
         <Link
           href="/kids"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white border-2 border-slate-200 text-slate-700 font-black text-xs hover:bg-slate-50 transition-all"
+          onClick={handleTileClick}
+          className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl btn-3d-amber text-amber-950 font-black text-sm shadow-md"
         >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Kids Corner</span>
+          <ArrowLeft className="w-5 h-5" />
+          <span>Kids Lobby</span>
         </Link>
 
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-50 border border-orange-200 text-orange-800 text-xs font-black">
-            <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+          <div className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-orange-100 border-2 border-orange-300 text-orange-950 text-sm font-black shadow-xs">
+            <Star className="w-5 h-5 fill-amber-400 text-amber-400 animate-spin" style={{ animationDuration: '8s' }} />
             <span>हिंदी वर्णमाला अभ्यास</span>
           </div>
         </div>
       </div>
 
       {/* Banner */}
-      <div className="text-center space-y-1">
-        <h1 className="text-3xl font-black text-slate-900 tracking-tight">
+      <div className="text-center space-y-2">
+        <h1 className="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight">
           हिंदी वर्णमाला ट्रेसिंग 🕉️
         </h1>
-        <p className="text-xs text-slate-500 font-medium">
-          शिरोरेखा (छत) के साथ हिंदी अक्षरों को लिखना सीखें!
+        <p className="text-base sm:text-lg text-slate-500 font-bold">
+          अक्षर चुनें और सुंदर शिरोरेखा के साथ लिखना सीखें!
         </p>
       </div>
 
-      {/* Section 1: Swar (स्वर - Vowels) */}
-      <div className="space-y-3">
-        <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full bg-orange-500" />
-          <h2 className="text-lg font-black text-slate-900">
-            स्वर (Swar - Vowels)
+      {/* Section 1: Swar (स्वर - 13 Vowels) */}
+      <div className="space-y-4">
+        <div className="flex items-center gap-3">
+          <span className="w-4 h-4 rounded-full bg-orange-500 shadow-sm" />
+          <h2 className="text-2xl font-black text-slate-900">
+            स्वर (Swar - 13 Vowels)
           </h2>
-          <span className="text-xs font-bold text-slate-400">13 अक्षर</span>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-4 sm:gap-5">
           {HINDI_SWAR.map((item) => {
             const isDone = completedMap.has(item.id);
 
@@ -63,27 +68,28 @@ export default function KidsHindiGridPage() {
               <Link
                 key={item.id}
                 href={`/kids/hindi/${item.id}`}
-                className={`group relative bg-white border-3 rounded-3xl p-4 text-center shadow-sm transition-all transform hover:-translate-y-1 hover:shadow-md active:scale-95 flex flex-col items-center justify-between ${
+                onClick={handleTileClick}
+                className={`group relative bg-white border-4 rounded-[2rem] p-5 text-center shadow-md transition-all transform hover:-translate-y-2 hover:shadow-xl active:scale-90 flex flex-col items-center justify-between ${
                   isDone
-                    ? 'border-emerald-400 bg-emerald-50/20'
+                    ? 'border-emerald-400 bg-emerald-50/30'
                     : 'border-slate-200 hover:border-orange-400'
                 }`}
               >
                 {isDone && (
-                  <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px]">
-                    <Check className="w-3 h-3 stroke-[3]" />
+                  <div className="absolute top-2.5 right-2.5 w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs shadow-sm">
+                    <Check className="w-4 h-4 stroke-[3]" />
                   </div>
                 )}
 
-                <div className="text-4xl mb-1 group-hover:scale-110 transition-transform">
+                <div className="text-5xl my-2 group-hover:scale-125 transition-transform animate-float select-none">
                   {item.emoji}
                 </div>
 
-                <div>
-                  <div className="text-3xl font-black text-slate-900 leading-none">
+                <div className="mt-2">
+                  <div className="text-4xl sm:text-5xl font-black text-slate-900 leading-none">
                     {item.char}
                   </div>
-                  <div className="text-[11px] font-bold text-slate-600 mt-1">
+                  <div className="text-xs sm:text-sm font-black text-slate-600 mt-2">
                     {item.word}
                   </div>
                 </div>
@@ -94,16 +100,15 @@ export default function KidsHindiGridPage() {
       </div>
 
       {/* Section 2: Vyanjan (व्यंजन - Consonants) */}
-      <div className="space-y-3 pt-4 border-t border-slate-200">
-        <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full bg-amber-500" />
-          <h2 className="text-lg font-black text-slate-900">
+      <div className="space-y-4 pt-6 border-t-4 border-slate-200">
+        <div className="flex items-center gap-3">
+          <span className="w-4 h-4 rounded-full bg-amber-500 shadow-sm" />
+          <h2 className="text-2xl font-black text-slate-900">
             व्यंजन (Vyanjan - Consonants)
           </h2>
-          <span className="text-xs font-bold text-slate-400">प्रमुख अक्षर</span>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-4 sm:gap-5">
           {HINDI_VYANJAN.map((item) => {
             const isDone = completedMap.has(item.id);
 
@@ -111,27 +116,28 @@ export default function KidsHindiGridPage() {
               <Link
                 key={item.id}
                 href={`/kids/hindi/${item.id}`}
-                className={`group relative bg-white border-3 rounded-3xl p-4 text-center shadow-sm transition-all transform hover:-translate-y-1 hover:shadow-md active:scale-95 flex flex-col items-center justify-between ${
+                onClick={handleTileClick}
+                className={`group relative bg-white border-4 rounded-[2rem] p-5 text-center shadow-md transition-all transform hover:-translate-y-2 hover:shadow-xl active:scale-90 flex flex-col items-center justify-between ${
                   isDone
-                    ? 'border-emerald-400 bg-emerald-50/20'
+                    ? 'border-emerald-400 bg-emerald-50/30'
                     : 'border-slate-200 hover:border-amber-400'
                 }`}
               >
                 {isDone && (
-                  <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px]">
-                    <Check className="w-3 h-3 stroke-[3]" />
+                  <div className="absolute top-2.5 right-2.5 w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs shadow-sm">
+                    <Check className="w-4 h-4 stroke-[3]" />
                   </div>
                 )}
 
-                <div className="text-4xl mb-1 group-hover:scale-110 transition-transform">
+                <div className="text-5xl my-2 group-hover:scale-125 transition-transform animate-float select-none">
                   {item.emoji}
                 </div>
 
-                <div>
-                  <div className="text-3xl font-black text-slate-900 leading-none">
+                <div className="mt-2">
+                  <div className="text-4xl sm:text-5xl font-black text-slate-900 leading-none">
                     {item.char}
                   </div>
-                  <div className="text-[11px] font-bold text-slate-600 mt-1">
+                  <div className="text-xs sm:text-sm font-black text-slate-600 mt-2">
                     {item.word}
                   </div>
                 </div>

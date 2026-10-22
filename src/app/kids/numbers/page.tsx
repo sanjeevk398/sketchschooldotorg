@@ -2,9 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Star, Sparkles, Check } from 'lucide-react';
+import { ArrowLeft, Star, Check } from 'lucide-react';
 import { KIDS_NUMBERS } from '@/data/kids-numbers';
 import { getKidsProgress, KidsProgress } from '@/lib/kids-storage';
+import { kidsAudio } from '@/lib/kids-audio';
 
 export default function KidsNumbersGridPage() {
   const [progress, setProgress] = useState<KidsProgress | null>(null);
@@ -15,38 +16,43 @@ export default function KidsNumbersGridPage() {
 
   const completedMap = new Set(progress?.completedIds || []);
 
+  const handleTileClick = () => {
+    kidsAudio.playPop();
+  };
+
   return (
-    <div className="space-y-6 py-4 max-w-5xl mx-auto">
+    <div className="space-y-8 py-4 max-w-5xl mx-auto">
       {/* Navigation Header */}
       <div className="flex items-center justify-between">
         <Link
           href="/kids"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white border-2 border-slate-200 text-slate-700 font-black text-xs hover:bg-slate-50 transition-all"
+          onClick={handleTileClick}
+          className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl btn-3d-emerald text-white font-black text-sm shadow-md"
         >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Kids Corner</span>
+          <ArrowLeft className="w-5 h-5" />
+          <span>Kids Lobby</span>
         </Link>
 
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-black">
-            <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+          <div className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-emerald-100 border-2 border-emerald-300 text-emerald-950 text-sm font-black shadow-xs">
+            <Star className="w-5 h-5 fill-amber-400 text-amber-400 animate-spin" style={{ animationDuration: '8s' }} />
             <span>1 to 10 & १ to १०</span>
           </div>
         </div>
       </div>
 
       {/* Banner */}
-      <div className="text-center space-y-1">
-        <h1 className="text-3xl font-black text-slate-900 tracking-tight">
+      <div className="text-center space-y-2">
+        <h1 className="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight">
           Numbers & Counting 🔢
         </h1>
-        <p className="text-xs text-slate-500 font-medium">
-          Count objects and trace numbers in English and Hindi!
+        <p className="text-base sm:text-lg text-slate-500 font-bold">
+          Count fun objects and trace English & Hindi numbers!
         </p>
       </div>
 
       {/* Numbers Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-5">
         {KIDS_NUMBERS.map((item) => {
           const isDone = completedMap.has(`num-${item.id}`);
 
@@ -54,32 +60,33 @@ export default function KidsNumbersGridPage() {
             <Link
               key={item.id}
               href={`/kids/numbers/${item.id}`}
-              className={`group relative bg-white border-3 rounded-3xl p-5 text-center shadow-sm transition-all transform hover:-translate-y-1 hover:shadow-md active:scale-95 flex flex-col items-center justify-between ${
+              onClick={handleTileClick}
+              className={`group relative bg-white border-4 rounded-[2rem] p-6 text-center shadow-md transition-all transform hover:-translate-y-2 hover:shadow-xl active:scale-90 flex flex-col items-center justify-between ${
                 isDone
-                  ? 'border-emerald-400 bg-emerald-50/20'
+                  ? 'border-emerald-400 bg-emerald-50/30'
                   : 'border-slate-200 hover:border-emerald-400'
               }`}
             >
               {isDone && (
-                <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px]">
-                  <Check className="w-3 h-3 stroke-[3]" />
+                <div className="absolute top-2.5 right-2.5 w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs shadow-sm">
+                  <Check className="w-4 h-4 stroke-[3]" />
                 </div>
               )}
 
-              <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">
+              <div className="text-5xl sm:text-6xl my-2 group-hover:scale-125 transition-transform animate-float select-none">
                 {item.emoji}
               </div>
 
-              <div>
+              <div className="mt-2">
                 <div className="flex items-center justify-center gap-2">
-                  <span className="text-3xl font-black text-slate-900">
+                  <span className="text-4xl sm:text-5xl font-black text-slate-900">
                     {item.englishDigit}
                   </span>
-                  <span className="text-2xl font-bold text-emerald-600">
+                  <span className="text-3xl sm:text-4xl font-black text-emerald-600">
                     ({item.hindiDigit})
                   </span>
                 </div>
-                <div className="text-xs font-bold text-slate-600 mt-1">
+                <div className="text-xs sm:text-sm font-black text-slate-600 mt-2">
                   {item.englishWord} / {item.hindiWord}
                 </div>
               </div>
