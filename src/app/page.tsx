@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, Sparkles, CheckCircle2, Zap, Flame, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Sparkles, CheckCircle2, Zap, Flame, ShieldCheck, Heart, Award } from 'lucide-react';
 
 export default function HomePage() {
   return (
@@ -32,10 +32,10 @@ export default function HomePage() {
           </Link>
 
           <Link
-            href="/learn"
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-bold text-base shadow-xs transition-all"
+            href="/kids"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-amber-400 hover:bg-amber-500 active:scale-98 text-amber-950 font-black text-base shadow-lg shadow-amber-400/25 transition-all"
           >
-            <span>Explore Curriculum</span>
+            <span>Kids Corner 🧸 (ABC, हिंदी, 123)</span>
           </Link>
         </div>
 
@@ -50,6 +50,29 @@ export default function HomePage() {
             <CheckCircle2 className="w-4 h-4 text-emerald-500" /> Free & Open
           </span>
         </div>
+      </section>
+
+      {/* Kids Corner Showcase Banner */}
+      <section className="bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400 rounded-3xl p-8 sm:p-10 text-white shadow-xl shadow-orange-500/15 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="space-y-3 text-center md:text-left max-w-xl">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-black">
+            <span>🧸 New: SketchSchool Junior</span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-black">
+            Kids Tracing & Phonics Suite
+          </h2>
+          <p className="text-xs sm:text-sm text-amber-100 font-medium leading-relaxed">
+            Designed for young learners aged 3–8: trace English alphabets (A–Z), Hindi Varnamala (स्वर व व्यंजन), and numbers (1–10 & १–१०) with rainbow magic ink, phonics audio, and collectible stickers!
+          </p>
+        </div>
+
+        <Link
+          href="/kids"
+          className="flex-shrink-0 flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-white text-amber-950 hover:bg-amber-50 active:scale-95 font-black text-sm shadow-md transition-all"
+        >
+          <span>Explore Kids Corner</span>
+          <ArrowRight className="w-4 h-4" />
+        </Link>
       </section>
 
       {/* Feature Showcase Grid */}

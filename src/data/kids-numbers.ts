@@ -1,0 +1,186 @@
+export interface KidNumber {
+  id: string;
+  num: number;
+  englishDigit: string;
+  hindiDigit: string;
+  englishWord: string;
+  hindiWord: string;
+  emoji: string;
+  emojiCount: number;
+  soundPromptEn: string;
+  soundPromptHi: string;
+  funFact: string;
+  strokeHintsEn: string[];
+  strokeHintsHi: string[];
+  sticker: {
+    name: string;
+    emoji: string;
+  };
+}
+
+export const KIDS_NUMBERS: KidNumber[] = [
+  {
+    id: '1',
+    num: 1,
+    englishDigit: '1',
+    hindiDigit: '१',
+    englishWord: 'One',
+    hindiWord: 'एक',
+    emoji: '🌞',
+    emojiCount: 1,
+    soundPromptEn: 'Number 1: One shining Sun',
+    soundPromptHi: 'संख्या १: एक चमकता सूरज',
+    funFact: 'We have 1 bright sun that warms our entire planet!',
+    strokeHintsEn: ['1. Start at the top and pull straight down!'],
+    strokeHintsHi: ['1. छोटा गोल वृत्त बनाकर नीचे डंडी खींचें'],
+    sticker: { name: 'Number One', emoji: '🥇' },
+  },
+  {
+    id: '2',
+    num: 2,
+    englishDigit: '2',
+    hindiDigit: '२',
+    englishWord: 'Two',
+    hindiWord: 'दो',
+    emoji: '🐼',
+    emojiCount: 2,
+    soundPromptEn: 'Number 2: Two cute Pandas',
+    soundPromptHi: 'संख्या २: दो प्यारे पांडा',
+    funFact: 'Birds have 2 wings, and humans have 2 eyes and 2 ears!',
+    strokeHintsEn: ['1. Curve around and slide diagonally right', '2. Straight across the bottom'],
+    strokeHintsHi: ['1. ऊपर आधा गोल घुमाएं', '2. नीचे तिरछी पूंछ खींचें'],
+    sticker: { name: 'Twin Pandas', emoji: '🐼' },
+  },
+  {
+    id: '3',
+    num: 3,
+    englishDigit: '3',
+    hindiDigit: '३',
+    englishWord: 'Three',
+    hindiWord: 'तीन',
+    emoji: '🚗',
+    emojiCount: 3,
+    soundPromptEn: 'Number 3: Three speedy Cars',
+    soundPromptHi: 'संख्या ३: तीन तेज गाड़ियां',
+    funFact: 'A triangle has 3 sides and traffic lights have 3 colors!',
+    strokeHintsEn: ['1. Curve around top shelf', '2. Curve around bottom belly'],
+    strokeHintsHi: ['1. ऊपर आधा गोल', '2. नीचे दूसरा आधा गोल थोड़ा लंबा'],
+    sticker: { name: 'Speedy Trio', emoji: '🏎️' },
+  },
+  {
+    id: '4',
+    num: 4,
+    englishDigit: '4',
+    hindiDigit: '४',
+    englishWord: 'Four',
+    hindiWord: 'चार',
+    emoji: '🎈',
+    emojiCount: 4,
+    soundPromptEn: 'Number 4: Four colorful Balloons',
+    soundPromptHi: 'संख्या ४: चार रंग-बिरंगे गुब्बारे',
+    funFact: 'A square has 4 equal sides and cars have 4 wheels!',
+    strokeHintsEn: ['1. Straight down and turn right', '2. Cross straight down through the middle'],
+    strokeHintsHi: ['1. गांठदार घुमाव बनाकर नीचे डंडी खींचें'],
+    sticker: { name: 'Floating Balloons', emoji: '🎈' },
+  },
+  {
+    id: '5',
+    num: 5,
+    englishDigit: '5',
+    hindiDigit: '५',
+    englishWord: 'Five',
+    hindiWord: 'पांच',
+    emoji: '⭐',
+    emojiCount: 5,
+    soundPromptEn: 'Number 5: Five shining Stars',
+    soundPromptHi: 'संख्या ५: पांच चमकते सितारे',
+    funFact: 'We have 5 fingers on each hand and 5 toes on each foot!',
+    strokeHintsEn: ['1. Straight down', '2. Big round tummy', '3. Give it a top hat'],
+    strokeHintsHi: ['1. प जैसा सुंदर घुमाव बनाएं'],
+    sticker: { name: 'Gold Star', emoji: '⭐' },
+  },
+  {
+    id: '6',
+    num: 6,
+    englishDigit: '6',
+    hindiDigit: '६',
+    englishWord: 'Six',
+    hindiWord: 'छह',
+    emoji: '🍎',
+    emojiCount: 6,
+    soundPromptEn: 'Number 6: Six sweet Apples',
+    soundPromptHi: 'संख्या ६: छह मीठे सेब',
+    funFact: 'Insects have 6 walking legs!',
+    strokeHintsEn: ['1. Slide down in a curve and loop back around'],
+    strokeHintsHi: ['1. उल्टे ३ जैसा घुमावदार आकार बनाएं'],
+    sticker: { name: 'Apple Basket', emoji: '🍎' },
+  },
+  {
+    id: '7',
+    num: 7,
+    englishDigit: '7',
+    hindiDigit: '७',
+    englishWord: 'Seven',
+    hindiWord: 'सात',
+    emoji: '🦋',
+    emojiCount: 7,
+    soundPromptEn: 'Number 7: Seven fluttering Butterflies',
+    soundPromptHi: 'संख्या ७: सात उड़ती तितलियां',
+    funFact: 'There are 7 vibrant colors in every rainbow and 7 days in a week!',
+    strokeHintsEn: ['1. Straight across the top', '2. Slant down diagonally to bottom left'],
+    strokeHintsHi: ['1. ऊपर छोटा लूप बनाकर नीचे गोल घुमाएं'],
+    sticker: { name: 'Rainbow Seven', emoji: '🌈' },
+  },
+  {
+    id: '8',
+    num: 8,
+    englishDigit: '8',
+    hindiDigit: '८',
+    englishWord: 'Eight',
+    hindiWord: 'आठ',
+    emoji: '🍦',
+    emojiCount: 8,
+    soundPromptEn: 'Number 8: Eight tasty Ice Creams',
+    soundPromptHi: 'संख्या ८: आठ स्वादिष्ट आइसक्रीम',
+    funFact: 'An octopus has 8 swimming arms and spiders have 8 legs!',
+    strokeHintsEn: ['1. Make an S and close the gates top and bottom!'],
+    strokeHintsHi: ['1. तिरछी रेखा बनाकर ऊपर घुमाएं'],
+    sticker: { name: 'Octopus Eight', emoji: '🐙' },
+  },
+  {
+    id: '9',
+    num: 9,
+    englishDigit: '9',
+    hindiDigit: '९',
+    englishWord: 'Nine',
+    hindiWord: 'नौ',
+    emoji: '🌸',
+    emojiCount: 9,
+    soundPromptEn: 'Number 9: Nine blooming Flowers',
+    soundPromptHi: 'संख्या ९: नौ खिले हुए फूल',
+    funFact: 'Nine is the highest single-digit number in our math system!',
+    strokeHintsEn: ['1. Make a loop at the top', '2. Pull the line straight down'],
+    strokeHintsHi: ['1. गोल वृत्त बनाकर नीचे झुकाएं'],
+    sticker: { name: 'Flower Garden', emoji: '🌸' },
+  },
+  {
+    id: '10',
+    num: 10,
+    englishDigit: '10',
+    hindiDigit: '१०',
+    englishWord: 'Ten',
+    hindiWord: 'दस',
+    emoji: '🚀',
+    emojiCount: 10,
+    soundPromptEn: 'Number 10: Blast off with Ten Rockets!',
+    soundPromptHi: 'संख्या १०: दस शक्तिशाली रॉकेट!',
+    funFact: '10, 9, 8, 7, 6, 5, 4, 3, 2, 1... Blast Off to space!',
+    strokeHintsEn: ['1. Straight line 1', '2. Round 0 next to it'],
+    strokeHintsHi: ['1. १ बनाएं', '2. उसके पास ० (शून्य) जोड़ें'],
+    sticker: { name: 'Space Rocket', emoji: '🚀' },
+  },
+];
+
+export function getKidNumberById(id: string): KidNumber | undefined {
+  return KIDS_NUMBERS.find((n) => n.id === id);
+}

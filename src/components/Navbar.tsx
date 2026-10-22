@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Flame, Zap, Heart, Pencil, Compass } from 'lucide-react';
+import { Flame, Zap, Heart, Pencil, Compass, Sparkles } from 'lucide-react';
 import { getLocalProgress, getUserLevel, UserProgress } from '@/lib/storage';
 
 export const Navbar: React.FC = () => {
@@ -47,14 +47,29 @@ export const Navbar: React.FC = () => {
           >
             <span>Daily Practice</span>
           </Link>
+          <Link
+            href="/kids"
+            className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold transition-all transform hover:scale-105"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+            <span>Kids Corner 🧸</span>
+          </Link>
         </nav>
 
         {/* Gamification Stats */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          {/* Mobile Kids Corner Link */}
+          <Link
+            href="/kids"
+            className="md:hidden flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold"
+          >
+            <span>🧸 Kids</span>
+          </Link>
+
           {/* Daily Streak */}
           <div
             title="Daily Practice Streak"
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-50 border border-orange-200/60 rounded-full text-xs font-bold text-orange-600 shadow-xs"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-orange-50 border border-orange-200/60 rounded-full text-xs font-bold text-orange-600 shadow-xs"
           >
             <Flame className="w-4 h-4 fill-orange-500 text-orange-500 animate-bounce" />
             <span>{progress?.streak || 1}</span>
@@ -63,7 +78,7 @@ export const Navbar: React.FC = () => {
           {/* XP & Level */}
           <div
             title={`Level ${levelInfo.level}: ${levelInfo.title}`}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 border border-amber-200/60 rounded-full text-xs font-bold text-amber-700 shadow-xs"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-amber-50 border border-amber-200/60 rounded-full text-xs font-bold text-amber-700 shadow-xs"
           >
             <Zap className="w-4 h-4 fill-amber-500 text-amber-500" />
             <span>{progress?.xp || 0} XP</span>
