@@ -21,7 +21,7 @@ class KidsAudio {
   }
 
   /**
-   * Joyful bubble pop sound when child begins a stroke
+   * Joyful bubble pop sound when child begins a stroke or taps a button
    */
   playPop() {
     const ctx = this.getAudioContext();
@@ -79,6 +79,37 @@ class KidsAudio {
   }
 
   /**
+   * Magic Star chime when passing 50% match
+   */
+  playFiftyPercentMatchSound() {
+    const ctx = this.getAudioContext();
+    if (!ctx) return;
+
+    try {
+      // Fast happy arpeggio: C5, E5, G5, C6
+      const notes = [523.25, 659.25, 783.99, 1046.5];
+      notes.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.07);
+
+        gain.gain.setValueAtTime(0.3, ctx.currentTime + i * 0.07);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.07 + 0.25);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(ctx.currentTime + i * 0.07);
+        osc.stop(ctx.currentTime + i * 0.07 + 0.3);
+      });
+    } catch {
+      // Ignored
+    }
+  }
+
+  /**
    * Victory celebration fanfare when a full letter/number is completed!
    */
   playFanfare() {
@@ -128,7 +159,6 @@ class KidsAudio {
       utterance.rate = 0.85; // Slightly slower, clear voice for kids
       utterance.pitch = 1.15; // Friendly, slightly higher pitch
 
-      // Attempt to pick a natural voice if available
       const voices = window.speechSynthesis.getVoices();
       if (voices.length > 0) {
         const targetLang = lang === 'hi' ? 'hi' : 'en';
@@ -140,6 +170,30 @@ class KidsAudio {
     } catch (e) {
       console.warn('Speech synthesis error:', e);
     }
+  }
+
+  /**
+   * Automatic enthusiastic voice prompt when match exceeds 50%
+   */
+  speakRewardOnFifty(char: string, word: string, lang: 'en' | 'hi' = 'en', isNumber: boolean = false) {
+    if (typeof window === 'undefined') return;
+
+    let phrase = '';
+    if (lang === 'hi') {
+      if (isNumber) {
+        phrase = `शाबाश! यह है संख्या ${char}!`;
+      } else {
+        phrase = `बहुत बढ़िया! आपने बनाया ${char}! ${char} से ${word}!`;
+      }
+    } else {
+      if (isNumber) {
+        phrase = `Super! You drew Number ${char}! ${word}!`;
+      } else {
+        phrase = `Awesome! You drew Letter ${char}! ${char} is for ${word}!`;
+      }
+    }
+
+    this.speak(phrase, lang);
   }
 }
 

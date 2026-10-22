@@ -3,10 +3,11 @@
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Volume2, Sparkles } from 'lucide-react';
+import { ArrowLeft, Volume2 } from 'lucide-react';
 import { KIDS_NUMBERS, getKidNumberById } from '@/data/kids-numbers';
 import { KidsTracingCanvas, KidsCanvasHandle } from '@/components/Kids/KidsTracingCanvas';
 import { KidsToolbar } from '@/components/Kids/KidsToolbar';
+import { KidsMatchMeter } from '@/components/Kids/KidsMatchMeter';
 import { KidsStickerModal } from '@/components/Kids/KidsStickerModal';
 import { kidsAudio } from '@/lib/kids-audio';
 import { recordKidItemCompleted } from '@/lib/kids-storage';
@@ -27,6 +28,7 @@ export default function KidsNumberPage({ params }: KidsNumberPageProps) {
   const [color, setColor] = useState('#10b981');
   const [brushSize, setBrushSize] = useState(14);
   const [strokeCount, setStrokeCount] = useState(0);
+  const [matchPercentage, setMatchPercentage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [poppedCount, setPoppedCount] = useState<number[]>([]);
 
@@ -48,9 +50,34 @@ export default function KidsNumberPage({ params }: KidsNumberPageProps) {
   const nextItem =
     currentIndex < KIDS_NUMBERS.length - 1 ? KIDS_NUMBERS[currentIndex + 1] : null;
 
+  const activeChar = mode === 'english' ? numItem.englishDigit : numItem.hindiDigit;
+  const activeWord = mode === 'english' ? numItem.englishWord : numItem.hindiWord;
+  const activeHints =
+    mode === 'english' ? numItem.strokeHintsEn : numItem.strokeHintsHi;
+
   const handleClear = () => {
     canvasRef.current?.clear();
     setStrokeCount(0);
+    setMatchPercentage(0);
+  };
+
+  const handleFiftyPercentReached = () => {
+    // Automatically speak when match exceeds 50%!
+    kidsAudio.speakRewardOnFifty(
+      activeChar,
+      activeWord,
+      mode === 'english' ? 'en' : 'hi',
+      true
+    );
+  };
+
+  const handleSpeakAgain = () => {
+    kidsAudio.speakRewardOnFifty(
+      activeChar,
+      activeWord,
+      mode === 'english' ? 'en' : 'hi',
+      true
+    );
   };
 
   const handleSubmit = () => {
@@ -89,11 +116,6 @@ export default function KidsNumberPage({ params }: KidsNumberPageProps) {
     }
   };
 
-  const activeChar = mode === 'english' ? numItem.englishDigit : numItem.hindiDigit;
-  const activeWord = mode === 'english' ? numItem.englishWord : numItem.hindiWord;
-  const activeHints =
-    mode === 'english' ? numItem.strokeHintsEn : numItem.strokeHintsHi;
-
   return (
     <div className="space-y-4 py-2 max-w-5xl mx-auto">
       {/* Top Bar Navigation & Language Switcher */}
@@ -109,7 +131,10 @@ export default function KidsNumberPage({ params }: KidsNumberPageProps) {
         {/* English / Hindi Digit Toggle */}
         <div className="flex items-center gap-1 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
           <button
-            onClick={() => setMode('english')}
+            onClick={() => {
+              setMode('english');
+              handleClear();
+            }}
             className={`px-3 py-1 rounded-xl text-xs font-black transition-all ${
               mode === 'english'
                 ? 'bg-emerald-500 text-white shadow-sm'
@@ -119,7 +144,10 @@ export default function KidsNumberPage({ params }: KidsNumberPageProps) {
             English (123)
           </button>
           <button
-            onClick={() => setMode('hindi')}
+            onClick={() => {
+              setMode('hindi');
+              handleClear();
+            }}
             className={`px-3 py-1 rounded-xl text-xs font-black transition-all ${
               mode === 'hindi'
                 ? 'bg-emerald-500 text-white shadow-sm'
@@ -199,8 +227,17 @@ export default function KidsNumberPage({ params }: KidsNumberPageProps) {
           </div>
         </div>
 
-        {/* Right Column: Tracing Canvas & Kid Toolbar */}
+        {/* Right Column: Tracing Canvas, Match Meter & Kid Toolbar */}
         <div className="lg:col-span-7 order-1 lg:order-2 space-y-3">
+          {/* Real-time Match Meter */}
+          <KidsMatchMeter
+            percentage={matchPercentage}
+            hasPassedFifty={matchPercentage >= 50}
+            char={activeChar}
+            word={activeWord}
+            onSpeakAgain={handleSpeakAgain}
+          />
+
           <KidsToolbar
             tool={tool}
             setTool={setTool}
@@ -220,6 +257,8 @@ export default function KidsNumberPage({ params }: KidsNumberPageProps) {
             color={color}
             brushSize={brushSize}
             onStrokeChange={setStrokeCount}
+            onMatchChange={setMatchPercentage}
+            onFiftyPercentReached={handleFiftyPercentReached}
           />
         </div>
       </div>

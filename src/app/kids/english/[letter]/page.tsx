@@ -3,13 +3,15 @@
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { ENGLISH_ALPHABET, getEnglishLetter } from '@/data/kids-english';
 import { KidsTracingCanvas, KidsCanvasHandle } from '@/components/Kids/KidsTracingCanvas';
 import { KidsToolbar } from '@/components/Kids/KidsToolbar';
+import { KidsMatchMeter } from '@/components/Kids/KidsMatchMeter';
 import { PhonicsCard } from '@/components/Kids/PhonicsCard';
 import { KidsStickerModal } from '@/components/Kids/KidsStickerModal';
 import { recordKidItemCompleted } from '@/lib/kids-storage';
+import { kidsAudio } from '@/lib/kids-audio';
 
 interface KidsLetterPageProps {
   params: {
@@ -26,6 +28,7 @@ export default function KidsLetterPage({ params }: KidsLetterPageProps) {
   const [color, setColor] = useState('#ef4444');
   const [brushSize, setBrushSize] = useState(14);
   const [strokeCount, setStrokeCount] = useState(0);
+  const [matchPercentage, setMatchPercentage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (!letter) {
@@ -52,6 +55,16 @@ export default function KidsLetterPage({ params }: KidsLetterPageProps) {
   const handleClear = () => {
     canvasRef.current?.clear();
     setStrokeCount(0);
+    setMatchPercentage(0);
+  };
+
+  const handleFiftyPercentReached = () => {
+    // Automatically speak the letter reward when drawing matches more than 50%!
+    kidsAudio.speakRewardOnFifty(letter.char, letter.word, 'en');
+  };
+
+  const handleSpeakAgain = () => {
+    kidsAudio.speakRewardOnFifty(letter.char, letter.word, 'en');
   };
 
   const handleSubmit = () => {
@@ -109,8 +122,17 @@ export default function KidsLetterPage({ params }: KidsLetterPageProps) {
           />
         </div>
 
-        {/* Right Column: Tracing Canvas & Kid Toolbar */}
+        {/* Right Column: Tracing Canvas, Match Meter & Kid Toolbar */}
         <div className="lg:col-span-7 order-1 lg:order-2 space-y-3">
+          {/* Real-time Match Meter */}
+          <KidsMatchMeter
+            percentage={matchPercentage}
+            hasPassedFifty={matchPercentage >= 50}
+            char={letter.char}
+            word={letter.word}
+            onSpeakAgain={handleSpeakAgain}
+          />
+
           <KidsToolbar
             tool={tool}
             setTool={setTool}
@@ -132,6 +154,8 @@ export default function KidsLetterPage({ params }: KidsLetterPageProps) {
             brushSize={brushSize}
             guides={letter.strokeGuideLines}
             onStrokeChange={setStrokeCount}
+            onMatchChange={setMatchPercentage}
+            onFiftyPercentReached={handleFiftyPercentReached}
           />
         </div>
       </div>

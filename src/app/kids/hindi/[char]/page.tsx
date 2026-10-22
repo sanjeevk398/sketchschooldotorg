@@ -7,9 +7,11 @@ import { ArrowLeft } from 'lucide-react';
 import { ALL_HINDI_CHARS, getHindiCharById } from '@/data/kids-hindi';
 import { KidsTracingCanvas, KidsCanvasHandle } from '@/components/Kids/KidsTracingCanvas';
 import { KidsToolbar } from '@/components/Kids/KidsToolbar';
+import { KidsMatchMeter } from '@/components/Kids/KidsMatchMeter';
 import { PhonicsCard } from '@/components/Kids/PhonicsCard';
 import { KidsStickerModal } from '@/components/Kids/KidsStickerModal';
 import { recordKidItemCompleted } from '@/lib/kids-storage';
+import { kidsAudio } from '@/lib/kids-audio';
 
 interface KidsHindiCharPageProps {
   params: {
@@ -26,6 +28,7 @@ export default function KidsHindiCharPage({ params }: KidsHindiCharPageProps) {
   const [color, setColor] = useState('#f97316');
   const [brushSize, setBrushSize] = useState(14);
   const [strokeCount, setStrokeCount] = useState(0);
+  const [matchPercentage, setMatchPercentage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (!hindiItem) {
@@ -51,6 +54,16 @@ export default function KidsHindiCharPage({ params }: KidsHindiCharPageProps) {
   const handleClear = () => {
     canvasRef.current?.clear();
     setStrokeCount(0);
+    setMatchPercentage(0);
+  };
+
+  const handleFiftyPercentReached = () => {
+    // Automatically speak in Hindi when match exceeds 50%!
+    kidsAudio.speakRewardOnFifty(hindiItem.char, hindiItem.word, 'hi');
+  };
+
+  const handleSpeakAgain = () => {
+    kidsAudio.speakRewardOnFifty(hindiItem.char, hindiItem.word, 'hi');
   };
 
   const handleSubmit = () => {
@@ -108,8 +121,17 @@ export default function KidsHindiCharPage({ params }: KidsHindiCharPageProps) {
           />
         </div>
 
-        {/* Right Column: Tracing Canvas & Kid Toolbar */}
+        {/* Right Column: Tracing Canvas, Match Meter & Kid Toolbar */}
         <div className="lg:col-span-7 order-1 lg:order-2 space-y-3">
+          {/* Real-time Match Meter */}
+          <KidsMatchMeter
+            percentage={matchPercentage}
+            hasPassedFifty={matchPercentage >= 50}
+            char={hindiItem.char}
+            word={hindiItem.word}
+            onSpeakAgain={handleSpeakAgain}
+          />
+
           <KidsToolbar
             tool={tool}
             setTool={setTool}
@@ -129,6 +151,8 @@ export default function KidsHindiCharPage({ params }: KidsHindiCharPageProps) {
             color={color}
             brushSize={brushSize}
             onStrokeChange={setStrokeCount}
+            onMatchChange={setMatchPercentage}
+            onFiftyPercentReached={handleFiftyPercentReached}
           />
         </div>
       </div>
